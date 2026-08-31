@@ -11,4 +11,6 @@ class AppStrings {
   // =========================
 
   static const String appIsRunning = "App is running!";
+  static const String registrationSuccess = "Registration Successful!";
+  static const String registrationError = "Registration Failed!";
 }

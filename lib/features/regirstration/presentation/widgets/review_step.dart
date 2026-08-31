@@ -1,3 +1,4 @@
+import 'package:equifax_poc/core/constants/strings.dart';
 import 'package:equifax_poc/core/theme/app_color.dart';
 import 'package:equifax_poc/features/regirstration/presentation/controllers/registration_controller.dart';
 import 'package:flutter/material.dart';
@@ -75,7 +76,7 @@ class ReviewStep extends ConsumerWidget {
                   if (!context.mounted) return;
 
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Registration successful!')),
+                     SnackBar(content: Text(AppStrings.registrationSuccess)),
                   );
 
                   await Future.delayed(const Duration(milliseconds: 500));
@@ -87,7 +88,7 @@ class ReviewStep extends ConsumerWidget {
                   if (!context.mounted) return;
 
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Registration failed: $e')),
+                    SnackBar(content: Text(AppStrings.registrationError)),
                   );
                 }
               },
