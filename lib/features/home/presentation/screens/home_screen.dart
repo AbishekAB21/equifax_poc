@@ -1,5 +1,6 @@
 import 'package:equifax_poc/core/theme/app_color.dart';
 import 'package:equifax_poc/features/auth/presentation/controllers/auth_controller.dart';
+import 'package:equifax_poc/features/auth/presentation/controllers/auth_state.dart';
 import 'package:equifax_poc/features/auth/presentation/login_screen.dart';
 import 'package:equifax_poc/features/home/presentation/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authState = ref.watch(authControllerProvider);
+    final authState = ref.watch(authControllerProvider).value ?? const AuthState();
     final user = authState.user;
 
     return Scaffold(

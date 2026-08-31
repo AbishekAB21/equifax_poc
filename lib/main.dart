@@ -1,6 +1,7 @@
 import 'package:equifax_poc/core/constants/strings.dart';
 import 'package:equifax_poc/core/router/app_router.dart';
 import 'package:equifax_poc/core/theme/app_theme.dart';
+import 'package:equifax_poc/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:equifax_poc/features/auth/presentation/controllers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,18 +12,29 @@ Future<void> main() async {
 
   final sharedPreferences = await SharedPreferences.getInstance();
 
+  final container = ProviderContainer(
+    overrides: [
+      sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+    ],
+  );
+
+  // Resolves AuthController.build(), which reads the saved
+  // session id and looks up the matching user before the
+  // app ever paints a frame.
+  final authState = await container.read(authControllerProvider.future);
+
   runApp(
-    ProviderScope(
-      overrides: [
-        sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-      ],
-      child: const MyApp(),
+    UncontrolledProviderScope(
+      container: container,
+      child: MyApp(isLoggedIn: authState.isLoggedIn),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool isLoggedIn;
+
+  const MyApp({super.key, required this.isLoggedIn});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +42,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: AppStrings.appName,
       theme: AppTheme.darkTheme,
-      routerConfig: AppRouter.router,
+      routerConfig: AppRouter.build(
+        initialLocation: isLoggedIn ? '/dashboard' : '/login',
+      ),
     );
   }
 }

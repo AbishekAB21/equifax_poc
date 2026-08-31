@@ -1,5 +1,6 @@
 import 'package:equifax_poc/core/theme/app_color.dart';
 import 'package:equifax_poc/features/auth/presentation/controllers/auth_controller.dart';
+import 'package:equifax_poc/features/auth/presentation/controllers/auth_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -8,20 +9,15 @@ class ProfileScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(authControllerProvider).user;
+    final user =
+        (ref.watch(authControllerProvider).value ?? const AuthState()).user;
 
     if (user == null) {
-      return const Scaffold(
-        body: Center(
-          child: Text('No user logged in'),
-        ),
-      );
+      return const Scaffold(body: Center(child: Text('No user logged in')));
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Profile'),
-      ),
+      appBar: AppBar(title: const Text('My Profile')),
 
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -36,46 +32,25 @@ class ProfileScreen extends ConsumerWidget {
                 _item('Gender', user.gender),
                 _item('Date of Birth', user.dob),
                 _item('Primary Phone', user.primaryPhone),
-                _item(
-                  'Secondary Phone',
-                  user.secondaryPhone,
-                ),
+                _item('Secondary Phone', user.secondaryPhone),
               ],
             ),
 
             _section(
               title: 'Education & Work',
               items: [
-                _item(
-                  'Highest Degree',
-                  user.highestDegree,
-                ),
-                _item(
-                  'Institution',
-                  user.institution,
-                ),
-                _item(
-                  'Passing Year',
-                  user.passYear,
-                ),
-                _item(
-                  'Occupation',
-                  user.occupation,
-                ),
-                _item(
-                  'Experience',
-                  '${user.experienceYears} years',
-                ),
+                _item('Highest Degree', user.highestDegree),
+                _item('Institution', user.institution),
+                _item('Passing Year', user.passYear),
+                _item('Occupation', user.occupation),
+                _item('Experience', '${user.experienceYears} years'),
               ],
             ),
 
             _section(
               title: 'Address',
               items: [
-                _item(
-                  'Address',
-                  user.streetAddress,
-                ),
+                _item('Address', user.streetAddress),
                 _item('Landmark', user.landmark),
                 _item('City', user.city),
                 _item('State', user.state),
@@ -86,9 +61,7 @@ class ProfileScreen extends ConsumerWidget {
 
             _section(
               title: 'Account',
-              items: [
-                _item('Login ID', user.loginId),
-              ],
+              items: [_item('Login ID', user.loginId)],
             ),
           ],
         ),
@@ -96,10 +69,7 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _section({
-    required String title,
-    required List<Widget> items,
-  }) {
+  Widget _section({required String title, required List<Widget> items}) {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(bottom: 16),
@@ -107,13 +77,10 @@ class ProfileScreen extends ConsumerWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: AppColors.border,
-        ),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
@@ -140,16 +107,13 @@ class ProfileScreen extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Row(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
             width: 125,
             child: Text(
               label,
-              style: const TextStyle(
-                color: AppColors.textSecondary,
-              ),
+              style: const TextStyle(color: AppColors.textSecondary),
             ),
           ),
 

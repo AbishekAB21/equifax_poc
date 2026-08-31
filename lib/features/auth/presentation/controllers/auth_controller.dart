@@ -3,23 +3,29 @@ import 'package:equifax_poc/features/auth/presentation/controllers/auth_state.da
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final authControllerProvider =
-    NotifierProvider<AuthController, AuthState>(
+    AsyncNotifierProvider<AuthController, AuthState>(
   AuthController.new,
 );
 
-class AuthController extends Notifier<AuthState> {
+class AuthController extends AsyncNotifier<AuthState> {
   @override
-  AuthState build() {
-    return const AuthState();
+  Future<AuthState> build() async {
+    final repository = ref.read(authRepositoryProvider);
+
+    final user = await repository.restoreSession();
+
+    return AuthState(user: user);
   }
 
   Future<bool> login(
     String loginId,
     String password,
   ) async {
-    state = state.copyWith(
-      isLoading: true,
-      clearError: true,
+    state = AsyncData(
+      (state.value ?? const AuthState()).copyWith(
+        isLoading: true,
+        clearError: true,
+      ),
     );
 
     try {
@@ -31,32 +37,38 @@ class AuthController extends Notifier<AuthState> {
       );
 
       if (user == null) {
-        state = state.copyWith(
-          isLoading: false,
-          errorMessage: 'Invalid login ID or password.',
+        state = AsyncData(
+          (state.value ?? const AuthState()).copyWith(
+            isLoading: false,
+            errorMessage: 'Invalid login ID or password.',
+          ),
         );
 
         return false;
       }
 
-      state = state.copyWith(
-        isLoading: false,
-        user: user,
-        clearError: true,
-      );
+      await repository.saveSession(user.id);
+
+      state = AsyncData(AuthState(user: user));
 
       return true;
     } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        errorMessage: 'Something went wrong. Please try again.',
+      state = AsyncData(
+        (state.value ?? const AuthState()).copyWith(
+          isLoading: false,
+          errorMessage: 'Something went wrong. Please try again.',
+        ),
       );
 
       return false;
     }
   }
 
-  void logout() {
-    state = const AuthState();
+  Future<void> logout() async {
+    final repository = ref.read(authRepositoryProvider);
+
+    await repository.clearSession();
+
+    state = const AsyncData(AuthState());
   }
 }

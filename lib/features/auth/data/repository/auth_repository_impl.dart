@@ -46,4 +46,31 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<List<UserProfileEntity>> getUsers() {
     return _localDataSource.getUsers();
   }
+
+  @override
+  Future<void> saveSession(String userId) {
+    return _localDataSource.saveSession(userId);
+  }
+
+  @override
+  Future<UserProfileEntity?> restoreSession() async {
+    final userId = _localDataSource.getSessionUserId();
+
+    if (userId == null) {
+      return null;
+    }
+
+    final users = await _localDataSource.getUsers();
+
+    try {
+      return users.firstWhere((user) => user.id == userId);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  @override
+  Future<void> clearSession() {
+    return _localDataSource.clearSession();
+  }
 }

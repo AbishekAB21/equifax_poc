@@ -1,5 +1,6 @@
 import 'package:equifax_poc/core/theme/app_color.dart';
 import 'package:equifax_poc/features/auth/presentation/controllers/auth_controller.dart';
+import 'package:equifax_poc/features/auth/presentation/controllers/auth_state.dart';
 import 'package:equifax_poc/features/home/presentation/screens/home_screen.dart';
 import 'package:equifax_poc/features/regirstration/presentation/screens/registration_screen.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +54,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authControllerProvider);
+final authState = ref.watch(authControllerProvider).value ?? const AuthState();
 
     return Scaffold(
       body: SafeArea(

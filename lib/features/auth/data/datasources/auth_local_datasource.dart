@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthLocalDataSource {
   static const String _usersKey = 'users';
+  static const String _sessionKey = 'current_user_id';
 
   final SharedPreferences _preferences;
 
@@ -41,5 +42,17 @@ class AuthLocalDataSource {
           ),
         )
         .toList();
+  }
+
+  Future<void> saveSession(String userId) {
+    return _preferences.setString(_sessionKey, userId);
+  }
+
+  String? getSessionUserId() {
+    return _preferences.getString(_sessionKey);
+  }
+
+  Future<void> clearSession() {
+    return _preferences.remove(_sessionKey);
   }
 }

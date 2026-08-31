@@ -9,4 +9,10 @@ abstract class AuthRepository {
   );
 
   Future<List<UserProfileEntity>> getUsers();
+
+  Future<void> saveSession(String userId);
+
+  Future<UserProfileEntity?> restoreSession();
+
+  Future<void> clearSession();
 }
