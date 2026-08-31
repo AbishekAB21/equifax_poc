@@ -10,6 +10,7 @@ class AppTextField extends StatelessWidget {
   final bool readOnly;
   final VoidCallback? onTap;
   final Widget? suffixIcon;
+  final bool obscureText;
 
   const AppTextField({
     super.key,
@@ -22,6 +23,7 @@ class AppTextField extends StatelessWidget {
     this.readOnly = false,
     this.onTap,
     this.suffixIcon,
+    this.obscureText = false,
   });
 
   @override
@@ -38,6 +40,7 @@ class AppTextField extends StatelessWidget {
         prefixIcon: Icon(icon),
         suffixIcon: suffixIcon,
       ),
+      obscureText: obscureText,
     );
   }
 }

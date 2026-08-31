@@ -1,7 +1,10 @@
 import 'package:equifax_poc/features/regirstration/presentation/controllers/registration_controller.dart';
+import 'package:equifax_poc/features/regirstration/presentation/widgets/address_info_step.dart';
+import 'package:equifax_poc/features/regirstration/presentation/widgets/credentials_step.dart';
 import 'package:equifax_poc/features/regirstration/presentation/widgets/education_info_step.dart';
 import 'package:equifax_poc/features/regirstration/presentation/widgets/personal_info_step.dart';
 import 'package:equifax_poc/features/regirstration/presentation/widgets/registration_progress_indicator.dart';
+import 'package:equifax_poc/features/regirstration/presentation/widgets/review_step.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -85,19 +88,13 @@ class RegistrationScreen extends ConsumerWidget {
         return const EducationInfoStep(key: ValueKey('education_info'));
 
       case 2:
-        return const Center(key: ValueKey('step_3'), child: Text('Address'));
+        return const AddressInfoStep(key: ValueKey('address_info'));
 
       case 3:
-        return const Center(
-          key: ValueKey('step_4'),
-          child: Text('Login Credentials'),
-        );
+        return const CredentialsStep(key: ValueKey('credentials'));
 
       case 4:
-        return const Center(
-          key: ValueKey('step_5'),
-          child: Text('Review & Register'),
-        );
+        return const ReviewStep(key: ValueKey('review'));
 
       default:
         return const SizedBox();
